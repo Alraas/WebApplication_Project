@@ -9,7 +9,6 @@ namespace WebApplication_Project.Models
     {
         public int ID { get; set; }
 
-        public Customer Customer{ get; set; }
         public int Customer_ID { get; set; }
         public int Amount { get; set; }
         public string Shipping_Address { get; set; }
@@ -20,6 +19,9 @@ namespace WebApplication_Project.Models
         public DateTime Order_Date { get; set; }
 
         public string Order_Status { get; set; }
+        public ICollection<Order_details> Order_Details { get; set; }
+        public Customer Customer { get; set; }
+
 
     }
 }

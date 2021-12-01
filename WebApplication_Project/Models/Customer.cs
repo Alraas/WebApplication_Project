@@ -22,6 +22,9 @@ namespace WebApplication_Project.Models
 
         public string Phone { get; set; }
 
+        public ICollection<Order> Orders { get; set; }
+
+
 
 
     }

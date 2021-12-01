@@ -17,5 +17,8 @@ namespace WebApplication_Project.Models
 
         public string Stock { get; set; }
 
+        public ICollection<Order_details> Order_Details { get; set; }
+
+
     }
 }
