@@ -14,5 +14,8 @@ namespace WebApplication_Project.Data
         {
         }
         public DbSet<WebApplication_Project.Models.Product> Product { get; set; }
+        public DbSet<WebApplication_Project.Models.Order> Order { get; set; }
+        public DbSet<WebApplication_Project.Models.Cart> Cart { get; set; }
+        public DbSet<WebApplication_Project.Models.Customer> Customer { get; set; }
     }
 }
