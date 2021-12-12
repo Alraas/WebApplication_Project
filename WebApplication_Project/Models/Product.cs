@@ -23,9 +23,9 @@ namespace WebApplication_Project.Models
 
         public string Image { get; set; }
 
-        public string Stock { get; set; }
+        [Required]
+        public int Stock { get; set; }
         [ForeignKey ("CategorieID")]
-        public int CategorieID { get; set; }
 
         public ICollection<Order_details> Order_Details { get; set; }
         public Categories Categorie { get; set; }

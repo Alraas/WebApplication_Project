@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebApplication_Project.Areas.Identity.Data;
 using WebApplication_Project.Data;
 
 namespace WebApplication_Project
@@ -33,7 +34,7 @@ namespace WebApplication_Project
                     Configuration.GetConnectionString("DefaultConnection")));
 
 
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<CustomUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddControllersWithViews();
