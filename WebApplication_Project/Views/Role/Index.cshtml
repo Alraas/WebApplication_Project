@@ -1,0 +1,52 @@
+﻿@model WebApplication_Project.ViewModels.RolesListViewModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>List of Roles</h1>
+<a asp-action="Create">Create</a>
+<table>
+    <thead>
+        <tr>
+            <th class="col-md-4">
+                @Html.DisplayNameFor(model => model.users[0].Id)
+            </th>
+            <th class="col-md-4">
+                @Html.DisplayNameFor(model => model.users[0].Name)
+            </th>
+
+            <th class="col-md-4">
+                @Html.DisplayNameFor(test => test.users[0].UserName)
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model.users)
+        {
+            <tr>
+                <td class="col-md-4">
+                    @user.Id
+                </td>
+                <td class="col-md-4">
+                    @user.Name
+                </td>
+                <td class="col-md-4">
+                    @user.UserName
+                </td>
+                <td class="col-md-4">
+                    <a asp-controller="Role" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                </td>
+                <td class="col-md-4">
+                    Edit
+                </td>
+                @if (this.User.Identity.IsAuthenticated)
+                {
+                    <td class="col-md-4">
+                        Delete
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
