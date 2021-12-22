@@ -79,44 +79,81 @@ namespace WebApplication_Project
 
         }
 
+        //private async Task CreateRoles(IServiceProvider serviceProvider)
+        //{
+        //    RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        //    ApplicationDbContext context = serviceProvider.GetRequiredService<ApplicationDbContext>();
+
+        //    IdentityResult roleResult;
+
+        //    bool roleCheck = await roleManager.RoleExistsAsync("user");
+
+        //    if (!roleCheck)
+        //    {
+        //        roleResult = await roleManager.CreateAsync(new IdentityRole("user"));
+        //    }
+
+        //     roleCheck = await roleManager.RoleExistsAsync("Admin");
+
+        //    if (!roleCheck)
+        //    {
+        //        roleResult = await roleManager.CreateAsync(new IdentityRole("Admin"));
+        //    }
+
+        //    context.SaveChanges();
+
+        ////Assign Admin to Main User
+        //CustomUser user = context.Users.FirstOrDefault(u => u.Email == "Admin@Admin.com");
+        //if (user != null)
+        //{
+        //    DbSet<IdentityUserRole<string>> roles = context.UserRoles;
+        //    IdentityRole adminRole = context.Roles.FirstOrDefault(r => r.Name == "Admin");
+        //    if (adminRole != null)
+        //    {
+        //        if (!roles.Any(ur => ur.UserId == user.Id && ur.RoleId == adminRole.Id))
+        //        {
+        //            roles.Add(new IdentityUserRole<string>() { UserId = user.Id, RoleId = adminRole.Id });
+        //            context.SaveChanges();
+        //        }
+        //    }
+        //}
+        //}
+
+
         private async Task CreateRoles(IServiceProvider serviceProvider)
         {
-            RoleManager<IdentityRole> roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManager = serviceProvider.GetRequiredService<UserManager<CustomUser>>();
             ApplicationDbContext context = serviceProvider.GetRequiredService<ApplicationDbContext>();
 
+            string[] roleNames = { "Admin", "Manager", "Member" };
             IdentityResult roleResult;
 
-            bool roleCheck = await roleManager.RoleExistsAsync("user");
-
-            if (!roleCheck)
+            foreach (var roleName in roleNames)
             {
-                roleResult = await roleManager.CreateAsync(new IdentityRole("user"));
+                var roleExists = await roleManager.RoleExistsAsync(roleName);
+                if (!roleExists)
+                {
+                    //Create the roles and seed them into the database
+                    roleResult = await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
             }
 
-             roleCheck = await roleManager.RoleExistsAsync("Admin");
-
-            if (!roleCheck)
+            //Assign Admin to Main User
+            CustomUser user = context.Users.FirstOrDefault(u => u.Email == "Admin@Admin.com");
+            if (user != null)
             {
-                roleResult = await roleManager.CreateAsync(new IdentityRole("Admin"));
+                DbSet<IdentityUserRole<string>> roles = context.UserRoles;
+                IdentityRole adminRole = context.Roles.FirstOrDefault(r => r.Name == "Admin");
+                if (adminRole != null)
+                {
+                    if (!roles.Any(ur => ur.UserId == user.Id && ur.RoleId == adminRole.Id))
+                    {
+                        roles.Add(new IdentityUserRole<string>() { UserId = user.Id, RoleId = adminRole.Id });
+                        context.SaveChanges();
+                    }
+                }
             }
-
-            context.SaveChanges();
-
-            ////Assign Admin to Main User
-            //CustomUser user = context.Users.FirstOrDefault(u => u.Email == "Admin@Admin.com");
-            //if (user != null)
-            //{
-            //    DbSet<IdentityUserRole<string>> roles = context.UserRoles;
-            //    IdentityRole adminRole = context.Roles.FirstOrDefault(r => r.Name == "Admin");
-            //    if (adminRole != null)
-            //    {
-            //        if (!roles.Any(ur => ur.UserId == user.Id && ur.RoleId == adminRole.Id))
-            //        {
-            //            roles.Add(new IdentityUserRole<string>() { UserId = user.Id, RoleId = adminRole.Id });
-            //            context.SaveChanges();
-            //        }
-            //    }
-            //}
         }
     }
 }

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -11,13 +13,17 @@ using WebApplication_Project.Models;
 
 namespace WebApplication_Project.Controllers
 {
+    [AllowAnonymous]
+
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public ProductsController(ApplicationDbContext context)
+        public ProductsController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            this._webHostEnvironment = webHostEnvironment;
         }
 
         // GET: Products
@@ -27,6 +33,8 @@ namespace WebApplication_Project.Controllers
         }
 
         // GET: ShowSearchForm
+        [AllowAnonymous]
+
         public async Task<IActionResult> ShowSearchForm()
         {
             return View("ShowSearchForm");
@@ -38,6 +46,8 @@ namespace WebApplication_Project.Controllers
         }
 
         // GET: Products/Details/5
+        [AllowAnonymous]
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -55,6 +65,8 @@ namespace WebApplication_Project.Controllers
             return View(product);
         }
 
+        [Authorize(Roles = "Admin")]
+
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -66,10 +78,21 @@ namespace WebApplication_Project.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ID,Name,Price,Description,Image,Stock")] Product product)
+        public async Task<IActionResult> Create([Bind("ID,Name,Price,Description,ImageFile,Stock")] Product product)
         {
             if (ModelState.IsValid)
             {
+                string wwwRootPath = _webHostEnvironment.WebRootPath;
+                string fileName = Path.GetFileNameWithoutExtension(product.ImageFile.FileName);
+                string extension = Path.GetExtension(product.ImageFile.FileName);
+                product.ImageName = fileName = fileName + extension;
+                string path = Path.Combine(wwwRootPath + "/Image/", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await product.ImageFile.CopyToAsync(fileStream);
+                }
+
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -79,7 +102,7 @@ namespace WebApplication_Project.Controllers
 
         // GET: Products/Edit/5
 
-        [Authorize]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -94,6 +117,8 @@ namespace WebApplication_Project.Controllers
             }
             return View(product);
         }
+        [Authorize(Roles = "Admin")]
+
 
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 

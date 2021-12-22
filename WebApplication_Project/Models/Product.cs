@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -20,8 +22,14 @@ namespace WebApplication_Project.Models
         [Display(Name = "Price")]
         public decimal Price { get; set; }
         public string Description { get; set; }
+        public string ImageName { get; set; }
 
-        public string Image { get; set; }
+
+
+
+        [NotMapped]
+        [DisplayName("Uplaod Image")]
+        public IFormFile ImageFile { get; set; }
 
         [Required]
         public int Stock { get; set; }
