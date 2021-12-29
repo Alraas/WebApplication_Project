@@ -13,7 +13,6 @@ using WebApplication_Project.Models;
 
 namespace WebApplication_Project.Controllers
 {
-    [AllowAnonymous]
 
     public class ProductsController : Controller
     {
@@ -65,7 +64,7 @@ namespace WebApplication_Project.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Administrator")]
 
         // GET: Products/Create
         public IActionResult Create()
@@ -78,6 +77,8 @@ namespace WebApplication_Project.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Administrator")]
+
         public async Task<IActionResult> Create([Bind("ID,Name,Price,Description,ImageFile,Stock")] Product product)
         {
             if (ModelState.IsValid)

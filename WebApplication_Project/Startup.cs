@@ -34,7 +34,7 @@ namespace WebApplication_Project
                     Configuration.GetConnectionString("DefaultConnection")));
 
 
-            services.AddDefaultIdentity<CustomUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<CustomUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 

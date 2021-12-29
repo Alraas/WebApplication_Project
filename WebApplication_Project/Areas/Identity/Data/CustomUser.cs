@@ -9,8 +9,8 @@ namespace WebApplication_Project.Areas.Identity.Data
     public class CustomUser: IdentityUser
     {
         [PersonalData]
-        public string Name { get; set; }
+        public string FirstName { get; set; }
         [PersonalData]
-        public string  Adress{ get; set; }
+        public string Dafault_Shpping_Address { get; set; }
     }
 }

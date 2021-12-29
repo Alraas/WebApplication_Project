@@ -10,6 +10,8 @@ using WebApplication_Project.ViewModels;
 
 namespace WebApplication_Project.Controllers
 {
+    //[Authorize(Roles = "Administrator")]
+
     public class RoleController : Controller
     {
         private UserManager<CustomUser> _userManager;
@@ -37,8 +39,8 @@ namespace WebApplication_Project.Controllers
                 UserDetailsViewModel viewModel = new UserDetailsViewModel()
                 {
                     ID = user.Id,
-                    Name = user.Name,
-                    Adress = user.Adress
+                    Dafault_Shpping_Address = user.Dafault_Shpping_Address,
+                    FirstName = user.FirstName
                 };
                 return View(viewModel);
             }
@@ -68,10 +70,10 @@ namespace WebApplication_Project.Controllers
             {
                 CustomUser user = new CustomUser
                 {
-                    Name = createUserViewModel.Name,
+                    FirstName = createUserViewModel.Firstname,
                     Email = createUserViewModel.Email,
                     UserName = createUserViewModel.Email,
-                    Adress = createUserViewModel.Adress
+                    Dafault_Shpping_Address = createUserViewModel.Dafault_Shpping_Address
                 };
                 IdentityResult result = await _userManager.CreateAsync(user, createUserViewModel.Password);
                 if (result.Succeeded)

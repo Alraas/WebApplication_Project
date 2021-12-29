@@ -53,8 +53,8 @@ namespace WebApplication_Project.Areas.Identity.Pages.Account.Manage
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
-                Name = user.Name,
-                Adress = user.Adress,
+                Name = user.FirstName,
+                Adress = user.Dafault_Shpping_Address,
 
             };
         }

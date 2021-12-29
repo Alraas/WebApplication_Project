@@ -8,7 +8,7 @@ namespace WebApplication_Project.ViewModels
     public class UserDetailsViewModel
     {
         public string ID { get; set; }
-        public string  Name { get; set; }
-        public string Adress { get; set; }
+        public string  FirstName  { get; set; }
+        public string Dafault_Shpping_Address { get; set; }
     }
 }

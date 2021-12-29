@@ -8,14 +8,15 @@ namespace WebApplication_Project.ViewModels
 {
     public class CreateUserViewModel
     {
-        public string Name { get; set; }
+        public string Firstname { get; set; }
+        public string Lastname { get; set; }
 
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
         [DataType(DataType.Password)]
         public string Password { get; set; }
 
-        public string Adress { get; set; }
+        public string Dafault_Shpping_Address { get; set; }
 
 
     }
