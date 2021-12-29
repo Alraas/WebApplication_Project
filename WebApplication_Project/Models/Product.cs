@@ -11,33 +11,27 @@ namespace WebApplication_Project.Models
 {
     public class Product
     {
-        [Key]
         public int ID { get; set; }
 
-        [Required]
-        [Display (Name ="Name")]
 
         public string Name { get; set; }
-        [Required]
-        [Display(Name = "Price")]
+
+
         public decimal Price { get; set; }
         public string Description { get; set; }
+
         public string ImageName { get; set; }
-
-
 
 
         [NotMapped]
         [DisplayName("Uplaod Image")]
         public IFormFile ImageFile { get; set; }
 
-        [Required]
+
         public int Stock { get; set; }
-        [ForeignKey ("CategorieID")]
+        //public int CategorieID { get; set; }
 
-        public ICollection<Order_details> Order_Details { get; set; }
+        public virtual ICollection<Order_details> Order_Details { get; set; }
         public Categories Categorie { get; set; }
-
-
     }
 }

@@ -10,7 +10,6 @@ using WebApplication_Project.ViewModels;
 
 namespace WebApplication_Project.Controllers
 {
-    [Authorize(Roles = "Admin")]
     public class RoleController : Controller
     {
         private UserManager<CustomUser> _userManager;

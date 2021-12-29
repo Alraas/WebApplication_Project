@@ -256,11 +256,12 @@ namespace WebApplication_Project.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categorie");
                 });
 
             modelBuilder.Entity("WebApplication_Project.Models.Customer", b =>
@@ -280,18 +281,23 @@ namespace WebApplication_Project.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Firstname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Lastname")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Password")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -307,9 +313,6 @@ namespace WebApplication_Project.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<int>("Amount")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CustomerID")
                         .HasColumnType("int");
 
                     b.Property<int>("Customer_ID")
@@ -338,37 +341,27 @@ namespace WebApplication_Project.Data.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("CustomerID");
+                    b.HasIndex("Customer_ID");
 
                     b.ToTable("Order");
                 });
 
             modelBuilder.Entity("WebApplication_Project.Models.Order_details", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CategorieID")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("OrderID")
-                        .HasColumnType("int");
-
                     b.Property<int>("Order_ID")
                         .HasColumnType("int");
 
                     b.Property<int>("Product_ID")
                         .HasColumnType("int");
 
-                    b.HasKey("ID");
+                    b.Property<int>("ID")
+                        .HasColumnType("int");
 
-                    b.HasIndex("CategorieID");
+                    b.HasKey("Order_ID", "Product_ID");
 
-                    b.HasIndex("OrderID");
+                    b.HasIndex("Product_ID");
 
-                    b.ToTable("Order_details");
+                    b.ToTable("Order_detail");
                 });
 
             modelBuilder.Entity("WebApplication_Project.Models.Product", b =>
@@ -468,18 +461,24 @@ namespace WebApplication_Project.Data.Migrations
                 {
                     b.HasOne("WebApplication_Project.Models.Customer", "Customer")
                         .WithMany("Orders")
-                        .HasForeignKey("CustomerID");
+                        .HasForeignKey("Customer_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebApplication_Project.Models.Order_details", b =>
                 {
-                    b.HasOne("WebApplication_Project.Models.Product", "Product")
-                        .WithMany("Order_Details")
-                        .HasForeignKey("CategorieID");
-
                     b.HasOne("WebApplication_Project.Models.Order", "Order")
                         .WithMany("Order_Details")
-                        .HasForeignKey("OrderID");
+                        .HasForeignKey("Order_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebApplication_Project.Models.Product", "Product")
+                        .WithMany("Order_Details")
+                        .HasForeignKey("Product_ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebApplication_Project.Models.Product", b =>

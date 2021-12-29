@@ -9,7 +9,7 @@ namespace WebApplication_Project.Models
     public class Cart
     {
         public int ID { get; set; }
-        
+
 
         public int Quantity { get; set; }
         public Decimal Total { get; set; }

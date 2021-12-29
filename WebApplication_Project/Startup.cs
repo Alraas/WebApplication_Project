@@ -73,7 +73,7 @@ namespace WebApplication_Project
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-            CreateRoles(serviceProvider).Wait();
+            //CreateRoles(serviceProvider).Wait();
 
 
 
@@ -147,7 +147,7 @@ namespace WebApplication_Project
                 IdentityRole adminRole = context.Roles.FirstOrDefault(r => r.Name == "Admin");
                 if (adminRole != null)
                 {
-                    if (!roles.Any(ur => ur.UserId == user.Id && ur.RoleId == adminRole.Id))
+                    if (!roles.Any(ur => ur.UserId == user.Id && ur.RoleId == adminRole.Id ))
                     {
                         roles.Add(new IdentityUserRole<string>() { UserId = user.Id, RoleId = adminRole.Id });
                         context.SaveChanges();
