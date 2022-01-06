@@ -7,7 +7,13 @@
 <h4 class="nav-item">
     <a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="ShowSearchForm">Search products</a>
 </h4>
-<a asp-action="Create">Create New</a>
+@{
+    if (ViewBag.IsCheck != null && ViewBag.IsCheck == true)
+    {
+        <a asp-action="Create">Create New</a>
+    }
+}
+
 
 
 <div class="row">
@@ -46,10 +52,23 @@
                                 <a class="btn btn-outline-primary float-right" asp-action="Details" asp-route-id="@item.ID">
                                     <i class="bi bi-eye-fill"></i> Show Details
                                 </a>
-                                <a class="btn btn-outline-primary " asp-action="Delete" asp-route-id="@item.ID">
-                                    <i class="bi bi-trash-fill"></i>
-                                    Delete
-                                </a>
+                                @{
+                                    if (ViewBag.IsCheck != null && ViewBag.IsCheck == true)
+                                    {
+                                        <a class="btn btn-outline-primary " asp-action="Delete" asp-route-id="@item.ID">
+                                            <i class="bi bi-trash-fill"></i>
+                                            Delete
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-outline-primary " asp-action="AddToCart" asp-route-id="@item.ID">
+                                            <i class="bi bi-pencil-square"></i>
+                                            Add To Cart
+                                        </a>
+                                    }
+                                }
+
 
                             </p>
                         </div>

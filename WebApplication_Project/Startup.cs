@@ -40,7 +40,12 @@ namespace WebApplication_Project
 
             services.AddControllersWithViews();
 
-
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromDays(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
             services.AddRazorPages();
         }
 
@@ -62,6 +67,7 @@ namespace WebApplication_Project
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -73,10 +79,7 @@ namespace WebApplication_Project
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
             });
-            //CreateRoles(serviceProvider).Wait();
-
-
-
+            CreateRoles(serviceProvider).Wait();
         }
 
         //private async Task CreateRoles(IServiceProvider serviceProvider)

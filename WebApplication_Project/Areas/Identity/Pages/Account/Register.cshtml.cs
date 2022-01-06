@@ -77,8 +77,12 @@ namespace WebApplication_Project.Areas.Identity.Pages.Account
             {
                 var user = new CustomUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
+                var sbc = await _userManager.AddToRoleAsync(user, "Member");
                 if (result.Succeeded)
                 {
+                    var finduser = _userManager.FindByEmailAsync(Input.Email);
+
+                    
                     _logger.LogInformation("User created a new account with password.");
 
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

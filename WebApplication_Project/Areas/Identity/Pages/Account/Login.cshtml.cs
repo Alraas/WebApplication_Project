@@ -12,23 +12,27 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using WebApplication_Project.Areas.Identity.Data;
+using WebApplication_Project.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace WebApplication_Project.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
     public class LoginModel : PageModel
     {
+        private readonly ApplicationDbContext _context;
         private readonly UserManager<CustomUser> _userManager;
         private readonly SignInManager<CustomUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
         public LoginModel(SignInManager<CustomUser> signInManager, 
             ILogger<LoginModel> logger,
-            UserManager<CustomUser> userManager)
+            UserManager<CustomUser> userManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _context = context;
         }
 
         [BindProperty]
@@ -87,6 +91,26 @@ namespace WebApplication_Project.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    var userId = _userManager.FindByEmailAsync(Input.Email);
+                    
+                    var id = userId.Result.Id;
+                    var list = _context.Cart.Where(a => a.CustomerId == Guid.Parse(id)).ToList().Count();
+                    string counter = "SessionCount";
+                    //var count = HttpContext.Session.GetInt32(counter).ToString();
+
+
+                    int newCounter = list;
+
+
+                    //if (newCounter == 0)
+                    //{
+                    //    newCounter = 1;
+                    //}
+                    //else
+                    //{
+                    //    newCounter = newCounter + 1;
+                    //}
+                    HttpContext.Session.SetInt32(counter, newCounter);
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }

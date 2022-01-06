@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,11 +25,26 @@ namespace WebApplication_Project.Controllers
             _context = context;
             this._webHostEnvironment = webHostEnvironment;
         }
-
+        //[Authorize]
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View( _context.Product.ToList());
+            var users = HttpContext.User.Claims.ToList();
+            if (users.Count() !=0)
+            {
+                var RoleName = users[3].Value;
+                if (RoleName == "Member")
+                {
+                    ViewBag.IsCheck = false;
+                }
+                else
+                {
+                    ViewBag.IsCheck = true;
+                }
+            }
+          
+            var list = _context.Product.ToList();
+            return View(list);
         }
 
         // GET: ShowSearchForm
@@ -41,7 +57,7 @@ namespace WebApplication_Project.Controllers
         // GET: ShowSearchResults
         public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
         {
-            return View("Index", await _context.Product.Where(x => x.Description.Contains(SearchPhrase)|| x.Name.Contains(SearchPhrase) ) .ToListAsync());
+            return View("Index", await _context.Product.Where(x => x.Description.Contains(SearchPhrase) || x.Name.Contains(SearchPhrase)).ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -172,6 +188,39 @@ namespace WebApplication_Project.Controllers
             }
 
             return View(product);
+        }
+        public async Task<IActionResult> AddToCart(int id)
+        {
+            var users = HttpContext.User.Claims.ToList();
+            var cusid = users[0].Value;
+            Cart cart = new Cart();
+            cart.Quantity = 1;
+            cart.ProductId = id;
+            cart.CustomerId = Guid.Parse(cusid);
+            cart.Total = 10;
+            _context.Cart.Add(cart);
+            await _context.SaveChangesAsync();
+
+
+            var list = _context.Cart.Where(a => a.CustomerId == Guid.Parse(cusid)).ToList().Count();
+            string counter = "SessionCount";
+            //var count = HttpContext.Session.GetInt32(counter).ToString();
+
+
+            int newCounter = list;
+           
+
+            //if (newCounter == 0)
+            //{
+            //    newCounter = 1;
+            //}
+            //else
+            //{
+            //    newCounter = newCounter + 1;
+            //}
+            HttpContext.Session.SetInt32(counter, newCounter);
+
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Products/Delete/5
