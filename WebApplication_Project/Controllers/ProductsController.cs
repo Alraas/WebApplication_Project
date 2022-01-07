@@ -80,7 +80,6 @@ namespace WebApplication_Project.Controllers
             return View(product);
         }
 
-        //[Authorize(Roles = "Administrator")]
 
         // GET: Products/Create
         public IActionResult Create()
@@ -204,20 +203,12 @@ namespace WebApplication_Project.Controllers
 
             var list = _context.Cart.Where(a => a.CustomerId == Guid.Parse(cusid)).ToList().Count();
             string counter = "SessionCount";
-            //var count = HttpContext.Session.GetInt32(counter).ToString();
 
 
             int newCounter = list;
            
 
-            //if (newCounter == 0)
-            //{
-            //    newCounter = 1;
-            //}
-            //else
-            //{
-            //    newCounter = newCounter + 1;
-            //}
+            
             HttpContext.Session.SetInt32(counter, newCounter);
 
             return RedirectToAction(nameof(Index));
