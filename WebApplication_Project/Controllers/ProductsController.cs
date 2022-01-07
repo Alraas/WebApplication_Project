@@ -80,7 +80,7 @@ namespace WebApplication_Project.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = "Administrator")]
+        //[Authorize(Roles = "Administrator")]
 
         // GET: Products/Create
         public IActionResult Create()
